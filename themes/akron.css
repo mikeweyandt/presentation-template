@@ -1,0 +1,200 @@
+/* @theme akron */
+
+/*
+ * The University of Akron — minimal Marp theme
+ * ------------------------------------------------------------------
+ * Official brand palette (uakron.edu/im/resources/brand/colors):
+ *   Buchtel Blue   #070C72   primary
+ *   Akron Gold     #9D9362   accent
+ * Athletics navy   #041E42   (alt. deep blue used for dividers)
+ *
+ * Layout classes (apply per-slide with `<!-- _class: NAME -->`):
+ *   title     full-blue opening slide
+ *   divider   section break
+ *   end       full-blue closing slide
+ * Helpers:
+ *   <div class="columns"> ... </div>   two even columns (needs --html)
+ */
+
+@import 'default';
+
+:root {
+  --akr-blue:      #070C72;
+  --akr-blue-deep: #041E42;
+  --akr-gold:      #9D9362;
+  --akr-gold-soft: #C8C09B;
+  --akr-ink:       #1B1B29;
+  --akr-muted:     #63636F;
+  --akr-paper:     #FFFFFF;
+  --akr-line:      #E6E6EC;
+  --akr-wash:      #F5F6FA;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base content slide                                                */
+/* ------------------------------------------------------------------ */
+section {
+  background: var(--akr-paper);
+  color: var(--akr-ink);
+  font-family: Helvetica, Arial, "Liberation Sans", sans-serif;
+  font-size: 26px;
+  line-height: 1.45;
+  letter-spacing: 0.1px;
+  padding: 68px 84px;
+}
+
+h1, h2, h3 {
+  color: var(--akr-blue);
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 1.15;
+}
+
+h1 { font-size: 46px; margin: 0 0 0.35em; }
+
+h2 {
+  font-size: 34px;
+  margin: 0 0 0.7em;
+  padding-bottom: 0.28em;
+  border-bottom: 3px solid var(--akr-gold);
+}
+
+h3 { font-size: 26px; color: var(--akr-muted); }
+
+strong { color: var(--akr-blue); font-weight: 700; }
+
+a {
+  color: var(--akr-blue);
+  text-decoration: none;
+  border-bottom: 1px solid var(--akr-gold);
+}
+
+ul, ol { margin: 0.2em 0 0.2em 0.1em; }
+li { margin: 0.35em 0; padding-left: 0.15em; }
+li::marker { color: var(--akr-gold); }
+
+/* Blockquote → left-accented callout */
+blockquote {
+  margin: 0.7em 0;
+  padding: 0.1em 0 0.1em 0.95em;
+  border-left: 5px solid var(--akr-gold);
+  color: var(--akr-muted);
+  font-style: normal;
+}
+blockquote::before,
+blockquote::after { content: none; }
+
+/* Tables */
+table { border-collapse: collapse; font-size: 0.86em; width: 100%; }
+th {
+  background: var(--akr-blue);
+  color: #fff;
+  font-weight: 700;
+  text-align: left;
+  padding: 0.5em 0.8em;
+}
+td { padding: 0.5em 0.8em; border-bottom: 1px solid var(--akr-line); }
+tr:nth-child(even) td { background: var(--akr-wash); }
+
+/* Code */
+code {
+  font-family: "DejaVu Sans Mono", "Liberation Mono", Menlo, monospace;
+  font-size: 0.9em;
+}
+pre {
+  background: var(--akr-wash);
+  border: 1px solid var(--akr-line);
+  border-left: 5px solid var(--akr-blue);
+  border-radius: 4px;
+}
+
+/* Pagination number */
+section::after {
+  color: var(--akr-muted);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Two-column helper */
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.6em;
+  align-items: start;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Title slide  ( <!-- _class: title --> )                           */
+/* ------------------------------------------------------------------ */
+section.title {
+  background: var(--akr-blue);
+  color: #fff;
+  justify-content: center;
+  padding: 96px;
+}
+section.title h1 {
+  color: #fff;
+  font-size: 62px;
+  margin-bottom: 0.25em;
+}
+section.title h1::after {
+  content: "";
+  display: block;
+  width: 96px;
+  height: 5px;
+  margin-top: 0.5em;
+  background: var(--akr-gold);
+}
+section.title h2 {
+  color: var(--akr-gold-soft);
+  font-size: 30px;
+  font-weight: 400;
+  margin: 0 0 1.3em;
+  padding: 0;
+  border: none;
+}
+section.title p {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 22px;
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Section divider  ( <!-- _class: divider --> )                     */
+/* ------------------------------------------------------------------ */
+section.divider {
+  background: var(--akr-blue-deep);
+  color: #fff;
+  justify-content: center;
+}
+section.divider h1 { color: #fff; font-size: 54px; }
+section.divider h1::after {
+  content: "";
+  display: block;
+  width: 96px;
+  height: 5px;
+  margin-top: 0.5em;
+  background: var(--akr-gold);
+}
+section.divider p { color: var(--akr-gold-soft); font-size: 24px; }
+
+/* ------------------------------------------------------------------ */
+/*  Closing slide  ( <!-- _class: end --> )                           */
+/* ------------------------------------------------------------------ */
+section.end {
+  background: var(--akr-blue);
+  color: #fff;
+  justify-content: center;
+}
+section.end h1 { color: #fff; }
+section.end h1::after {
+  content: "";
+  display: block;
+  width: 96px;
+  height: 5px;
+  margin-top: 0.5em;
+  background: var(--akr-gold);
+}
+section.end strong { color: #fff; }
+section.end p { color: rgba(255, 255, 255, 0.82); }
+section.end a { color: var(--akr-gold-soft); border: none; }

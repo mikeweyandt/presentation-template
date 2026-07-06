@@ -1,0 +1,6 @@
+# Generated decks
+*.pdf
+*.pptx
+*.html
+
+# Keep the template source in version control; build artifacts are disposable.
