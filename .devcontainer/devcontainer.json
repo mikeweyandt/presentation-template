@@ -9,7 +9,11 @@
         "marp-team.marp-vscode"
       ],
       "settings": {
-        "markdown.marp.themes": ["./themes/akron.css"],
+        "markdown.marp.themes": [
+        "./themes/akron.css",
+        "./themes/akron-cs.css",
+        "./themes/akron-cs-handout.css"
+      ],
         "markdown.marp.enableHtml": true,
         "markdown.marp.browser": "chrome",
         "markdown.marp.browserPath": "/usr/local/bin/marp-browser"

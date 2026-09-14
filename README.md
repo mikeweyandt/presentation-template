@@ -4,12 +4,25 @@ A minimal [Marp](https://marp.app/) presentation template styled with The Univer
 of Akron's brand colors. Edit one Markdown file, then export a **PDF** or **PowerPoint**
 with a single `make` command — all inside a reproducible devcontainer.
 
+Two themes ship with it:
+
+| Theme | For | Demo deck |
+| --- | --- | --- |
+| `akron` | general talks — light, brand-forward | `presentation.md` |
+| `akron-cs` | technical talks and lectures — dark, terminal-inspired, with code, pseudocode, diagram and math styling | `lecture.md` |
+
+Pick one per deck in the front matter (`theme: akron-cs`).
+
 ```
 .
-├── presentation.md          # your deck (title + 6 content slides + close)
-├── themes/akron.css         # the Akron theme (colors, layouts)
-├── Makefile                 # make pdf / make pptx / make html / make watch
-└── .devcontainer/           # Node + Chromium + Marp CLI, ready to go
+├── presentation.md              # general-purpose deck (uses `akron`)
+├── lecture.md                   # CS lecture deck (uses `akron-cs`)
+├── themes/
+│   ├── akron.css                # light Akron theme
+│   ├── akron-cs.css             # dark CS theme
+│   └── akron-cs-handout.css     # light print variant of akron-cs
+├── Makefile                     # make pdf / pptx / html / handout / watch
+└── .devcontainer/               # Node + browser + fonts + Marp CLI
 ```
 
 ## Quick start
@@ -36,10 +49,11 @@ Run `make` with no target for the full list.
 | `make pdf`    | `presentation.pdf`                                  |
 | `make html`   | `presentation.html` (standalone deck)               |
 | `make all`    | PDF **and** PPTX                                     |
+| `make handout`| `*-handout.pdf` — light, print-friendly PDF          |
 | `make watch`  | Live preview + hot reload at http://localhost:8080  |
 | `make clean`  | Remove generated files                              |
 
-Build a different file with `make pdf SRC=mydeck.md`.
+Build a different file with `make pdf SRC=mydeck.md` — e.g. `make pdf SRC=lecture.md`.
 
 ## Writing slides
 
@@ -73,6 +87,111 @@ Live preview while editing is provided by the
 [Marp for VS Code](https://marketplace.visualstudio.com/items?itemName=marp-team.marp-vscode)
 extension, which the devcontainer installs and points at the Akron theme automatically.
 
+## The `akron-cs` theme
+
+A dark, terminal-inspired theme for technical talks. Set it in the front matter:
+
+```yaml
+---
+marp: true
+theme: akron-cs
+paginate: true
+size: 16:9
+header: '~/cs-501/lecture-04'
+footer: 'CS 501 · The University of Akron'
+---
+```
+
+`header:` and `footer:` are Marp's own directives — the theme styles them as a
+terminal path chip and a muted lockup. Clear them on cover slides with
+`<!-- _header: '' -->`.
+
+### Slide classes
+
+```markdown
+<!-- _class: title -->      opening slide, grid wash + block cursor
+<!-- _class: divider -->    section break (an `###` becomes the big numeral)
+<!-- _class: end -->        closing slide
+<!-- _class: code -->       a slide that is mostly one listing
+<!-- _class: terminal -->   a slide that is mostly one transcript
+```
+
+### Helpers
+
+All of these are raw HTML, which the build already enables. Keep a blank line
+around Markdown nested inside a `<div>` or it will not be parsed.
+
+```html
+<div class="columns">…</div>        <!-- two even columns -->
+<div class="columns-3">…</div>      <!-- three even columns -->
+
+<div class="code-card" data-file="dijkstra.py">
+```python
+...
+```
+</div>
+
+<div class="terminal" data-title="bash">
+```console
+$ make pdf
+```
+</div>
+
+<div class="algo" data-name="Dijkstra(G, w, s)" data-cost="O(E log V)">
+
+1. first step
+2. second step
+
+</div>
+
+<span class="big-o">O(n log n)</span>
+
+<div class="diagram">
+  <div class="node">s</div><span class="arrow"></span><div class="node accent">u</div>
+</div>
+```
+
+Callout flavors go on a blockquote: `<blockquote class="note">`, `.warn`, `.proof`.
+
+### Code, math and diagrams
+
+- **Syntax highlighting** is automatic (highlight.js, via Marp). Fenced blocks also
+  get a small language badge.
+- **Terminal transcripts**: use a ```` ```console ```` fence and prefix commands with
+  `$ ` — highlight.js tags the prompt and the theme colors it gold, so commands
+  separate from output with no extra markup.
+- **Math** is MathJax, Marp's default engine. `$inline$` and `$$display$$` both work;
+  display equations get a gold rule. A deck can opt into KaTeX with `math: katex`.
+- **Diagrams** are plain HTML (`.diagram` / `.node` / `.arrow`) or hand-written inline
+  `<svg>`, which inherits the theme palette when placed inside `.diagram` or `.fig`.
+
+### Handouts
+
+The dark theme is used for **every** output, including `.pptx`. For a light,
+toner-friendly PDF:
+
+```bash
+make handout SRC=lecture.md      # → lecture-handout.pdf
+```
+
+This renders with `themes/akron-cs-handout.css`, which imports `akron-cs` and
+restates only the color tokens.
+
+> **Why a separate theme rather than `@media print`?** Marp renders PDF with
+> `page.pdf()` (print media) *and* renders PPTX by screenshotting slides after an
+> explicit `emulateMediaType('print')`. A print media query would therefore lighten
+> the PowerPoint too, leaving the dark theme visible only in the live preview.
+
+### Known limitations
+
+- **No per-line highlighting.** Marp has no syntax for it; it needs a markdown-it
+  plugin, which this template does not add. Split the listing or use a comment instead.
+- **No Mermaid.** Marp does not render ```` ```mermaid ```` fences. Use the `.diagram`
+  helpers or inline SVG.
+- **A code slide holds roughly 24 lines.** Marp's auto-scaling fits code to the slide
+  *width* only — nothing shrinks it vertically, so a longer listing will overflow.
+  Split it across two slides.
+
 ## Brand colors
 
 The theme uses The University of Akron's official palette
@@ -85,6 +204,29 @@ The theme uses The University of Akron's official palette
 | Athletics Navy | `#041E42` | Section dividers          |
 
 Adjust any of these by editing the CSS variables at the top of `themes/akron.css`.
+
+`akron-cs` keeps those three as anchors and adds an extended screen palette for
+syntax and diagrams — teal, cyan, violet, magenta, amber, red and green, each
+chosen to clear 4.5:1 against the dark ground. Buchtel Blue is too dark to read on
+that ground, so it is used structurally (table headers, fills) while a lifted
+`--akr-blue-lift` carries anything that has to be legible as text. Every color in
+the theme is a CSS variable at the top of `themes/akron-cs.css`.
+
+## Fonts
+
+The base image ships none, so the devcontainer installs them:
+
+| Package | Used by |
+| --- | --- |
+| `fonts-liberation`, `fonts-dejavu-core` | `akron` |
+| `fonts-jetbrains-mono`, `fonts-inter` | `akron-cs` |
+
+All four are `Architecture: all`, so they sit in the shared `apt-get install` list
+rather than the architecture-specific branch below.
+
+> **Rebuild required.** If you had a container before `akron-cs` was added, rebuild
+> it (*Dev Containers: Rebuild Container*) or the CS theme will silently fall back to
+> DejaVu and Liberation.
 
 ## How export works
 

@@ -1,5 +1,9 @@
 {
-  "markdown.marp.themes": ["./themes/akron.css"],
+  "markdown.marp.themes": [
+    "./themes/akron.css",
+    "./themes/akron-cs.css",
+    "./themes/akron-cs-handout.css"
+  ],
   "markdown.marp.enableHtml": true,
   "markdown.marp.exportType": "pdf"
 }

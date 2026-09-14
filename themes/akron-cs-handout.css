@@ -1,0 +1,77 @@
+/* @theme akron-cs-handout */
+
+/*
+ * The University of Akron — computer science theme, LIGHT print variant
+ * ==================================================================
+ * Everything in `akron-cs` reads its color through a custom property, so
+ * this file only restates :root. No rule is duplicated.
+ *
+ * Why this is a separate theme rather than an `@media print` block in
+ * akron-cs.css: marp-cli 4.5.0 renders PDF with page.pdf() (print media by
+ * default) AND renders PPTX by screenshotting slides after an explicit
+ * page.emulateMediaType('print'). A print media query would therefore turn
+ * the PDF *and* the PowerPoint light, leaving the dark theme visible only
+ * in the live preview. Dark stays the default everywhere; this variant is
+ * opt-in via `make handout`, which passes `--theme akron-cs-handout` to
+ * override the deck's front matter.
+ *
+ * Colors here are the ink-weight counterparts of the dark palette: the
+ * brand blue and gold return to their true values (they are legible on
+ * white), and the extended syntax palette is darkened to clear 4.5:1
+ * against paper.
+ */
+
+@import 'akron-cs';
+
+:root {
+  /* ground — paper */
+  --bg:            #FFFFFF;
+  --bg-panel:      #F4F6FB;
+  --bg-raise:      #EBEFF7;
+
+  /* rules */
+  --line:          #D5DCEA;
+  --line-soft:     #E6EAF3;
+
+  /* text */
+  --fg:            #14192B;
+  --fg-muted:      #4E5A73;
+  --fg-dim:        #75809A;
+
+  /* brand — at full strength, now that the ground is white */
+  --akr-blue:      #070C72;
+  --akr-blue-deep: #041E42;
+  --akr-gold:      #9D9362;
+  --akr-blue-lift: #070C72;
+  --akr-gold-lift: #6F6740;
+
+  /* extended — darkened for ink */
+  --c-teal:        #0F7A63;
+  --c-cyan:        #10618A;
+  --c-violet:      #5B3FBF;
+  --c-magenta:     #A32C77;
+  --c-amber:       #8A5A10;
+  --c-red:         #B03418;
+  --c-green:       #1F7A34;
+}
+
+/*
+ * Cover slides go light too, so a printed handout never lays down a
+ * full-bleed dark page. The grid wash is dropped for the same reason.
+ * To keep the covers dark in handouts, delete this block.
+ */
+section.title,
+section.end {
+  background: var(--bg);
+}
+section.divider {
+  background: var(--bg-panel);
+}
+section.divider h3 { color: var(--akr-gold); opacity: 1; }
+section.divider p  { color: var(--fg-muted); }
+
+/* Header chip reads as a light label rather than a raised panel. */
+header { background: var(--bg-panel); }
+
+/* Table headers stay solid brand blue with white type — legible in mono. */
+th { background: var(--akr-blue); color: #fff; }

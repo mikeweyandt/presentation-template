@@ -3,7 +3,10 @@ FROM node:20-bookworm-slim
 # System dependencies:
 #   browser          — headless browser Marp uses to render PDF/PPTX (see below)
 #   make             — drives the build targets
-#   fonts-*          — so exported slides render text (base image ships no fonts)
+#   fonts-*          — so exported slides render text (base image ships no fonts).
+#                      liberation/dejavu back the `akron` theme; jetbrains-mono
+#                      and inter back `akron-cs`. All four are Architecture: all,
+#                      so they stay out of the arch-specific case block below.
 #
 # The browser differs by architecture, and that is deliberate:
 #   arm64  — Debian's chromium. Google publishes no arm64 Chrome .deb for
@@ -25,6 +28,8 @@ RUN set -eux; \
         make \
         fonts-liberation \
         fonts-dejavu-core \
+        fonts-jetbrains-mono \
+        fonts-inter \
         ca-certificates; \
     case "$(dpkg --print-architecture)" in \
       amd64) \

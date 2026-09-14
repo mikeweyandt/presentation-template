@@ -1,0 +1,764 @@
+/* @theme akron-cs */
+
+/*
+ * The University of Akron — computer science Marp theme (dark)
+ * ==================================================================
+ * A dark, terminal-inspired sibling of `akron`, built for technical
+ * talks: syntax-highlighted code, terminal transcripts, pseudocode,
+ * diagrams and LaTeX math.
+ *
+ * Brand anchors (uakron.edu/im/resources/brand/colors):
+ *   Buchtel Blue    #070C72   primary  — structural only on dark
+ *   Akron Gold      #9D9362   accent
+ *   Athletics Navy  #041E42   deep blue
+ * Buchtel Blue is too dark to read on a dark ground, so anything that
+ * must be legible as TEXT uses the lifted tokens (--akr-blue-lift,
+ * --akr-gold-lift) instead. Every lifted/extended color clears 4.5:1
+ * against --bg.
+ *
+ * Slide classes ( <!-- _class: NAME --> ):
+ *   title     opening slide, grid wash + block cursor
+ *   divider   section break with oversized numeral
+ *   end       closing slide
+ *   code      reduced chrome, larger type — a slide that is one listing
+ *   terminal  whole-slide transcript
+ *
+ * Helpers (raw HTML — the build passes --html):
+ *   <div class="columns">          two even columns
+ *   <div class="columns-3">        three even columns
+ *   <div class="code-card" data-file="x.py">   titled code block
+ *   <div class="terminal" data-title="bash">   terminal panel
+ *   <div class="algo" data-name="X" data-cost="O(n)"> + <ol>
+ *   <span class="big-o">O(n log n)</span>
+ *   <div class="diagram"> <div class="node"> <span class="arrow">
+ *   <blockquote class="note|warn|proof">
+ *
+ * Header/footer use Marp's native `header:` / `footer:` directives.
+ *
+ * Light counterpart for print: themes/akron-cs-handout.css (`make handout`).
+ * Every color below is a token so that variant only restates :root.
+ */
+
+@import 'default';
+
+:root {
+  /* ground */
+  --bg:            #0A1224;
+  --bg-panel:      #111B33;
+  --bg-raise:      #17243F;
+
+  /* rules */
+  --line:          #24324F;
+  --line-soft:     #1A2740;
+
+  /* text */
+  --fg:            #E6ECF7;
+  --fg-muted:      #96A4BF;
+  --fg-dim:        #64748F;
+
+  /* brand — structural */
+  --akr-blue:      #070C72;
+  --akr-blue-deep: #041E42;
+  --akr-gold:      #9D9362;
+
+  /* brand — legible on dark */
+  --akr-blue-lift: #6C8CFF;
+  --akr-gold-lift: #D3C48A;
+
+  /* extended: syntax + diagrams */
+  --c-teal:        #5BD1B4;
+  --c-cyan:        #5FBDE8;
+  --c-violet:      #A694F5;
+  --c-magenta:     #E886C0;
+  --c-amber:       #E9B063;
+  --c-red:         #F0836A;
+  --c-green:       #7FD68C;
+
+  /* type */
+  --font-sans: Inter, "Inter Variable", "Liberation Sans", Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, monospace;
+
+  /* shared geometry */
+  --radius:        6px;
+  --rule:          4px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base content slide                                                */
+/* ------------------------------------------------------------------ */
+section {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 26px;
+  line-height: 1.45;
+  letter-spacing: 0.1px;
+  padding: 68px 84px;
+}
+
+section h1,
+section h2,
+section h3 {
+  font-family: var(--font-mono);
+  color: var(--fg);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+section h1 { font-size: 46px; margin: 0 0 0.35em; }
+
+section h2 {
+  font-size: 34px;
+  margin: 0 0 0.7em;
+  padding-bottom: 0.28em;
+  border-bottom: var(--rule) solid var(--akr-gold);
+}
+
+/* Prompt glyph on content slides only — cover slides stay clean. */
+section:not(.title):not(.divider):not(.end) h2::before {
+  content: "> ";
+  color: var(--akr-gold-lift);
+  font-weight: 700;
+}
+
+/* h3 becomes a small eyebrow label. */
+section h3 {
+  font-size: 17px;
+  color: var(--akr-gold-lift);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin: 0 0 0.5em;
+}
+
+section strong { color: var(--akr-gold-lift); font-weight: 700; }
+section em { color: var(--fg-muted); }
+
+section a {
+  color: var(--akr-blue-lift);
+  text-decoration: none;
+  border-bottom: 1px solid var(--akr-gold);
+}
+
+section ul,
+section ol { margin: 0.2em 0 0.2em 0.1em; padding-left: 1.4em; }
+section li { margin: 0.35em 0; padding-left: 0.15em; }
+section li::marker { color: var(--akr-gold-lift); font-family: var(--font-mono); }
+
+section hr {
+  border: 0;
+  height: 1px;
+  background: var(--line);
+  border-top: 1px solid var(--line);
+  margin: 0.9em 0;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Header / footer  (Marp `header:` / `footer:` directives)          */
+/* ------------------------------------------------------------------ */
+header {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--fg-muted);
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 4px 12px;
+  top: 30px;
+  left: 84px;
+}
+
+footer {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--fg-dim);
+  letter-spacing: 0.04em;
+  bottom: 28px;
+  left: 84px;
+}
+
+/* Pagination number */
+section::after {
+  font-family: var(--font-mono);
+  color: var(--fg-dim);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Callouts                                                          */
+/* ------------------------------------------------------------------ */
+section blockquote {
+  margin: 0.7em 0;
+  padding: 0.55em 0 0.55em 0.95em;
+  border-left: 5px solid var(--akr-gold);
+  background: var(--bg-panel);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--fg-muted);
+  font-style: normal;
+}
+section blockquote::before,
+section blockquote::after { content: none; }
+
+blockquote.note  { border-left-color: var(--c-cyan); }
+blockquote.warn  { border-left-color: var(--c-amber); }
+blockquote.proof { border-left-color: var(--c-violet); font-family: var(--font-mono); font-size: 0.9em; }
+
+blockquote.note::first-line,
+blockquote.warn::first-line { color: var(--fg); }
+
+/* ------------------------------------------------------------------ */
+/*  Tables                                                            */
+/* ------------------------------------------------------------------ */
+section table {
+  display: table;            /* default makes it `block; width: max-content` */
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86em;
+}
+/*
+ * default paints every row with the light GitHub palette
+ * (`section table tr { background-color: var(--bgColor-default) }`) and
+ * outlines every cell. Both are cleared here; striping is re-applied
+ * below from this theme's own tokens.
+ */
+section table tr {
+  background-color: transparent;
+  border-top: 0;
+}
+section table th {
+  background: var(--akr-blue);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-align: left;
+  letter-spacing: 0.02em;
+  padding: 0.5em 0.8em;
+  border: 0;
+}
+section table td {
+  padding: 0.5em 0.8em;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--fg);
+}
+section table tr:nth-child(even) td { background: var(--bg-panel); }
+
+/* ------------------------------------------------------------------ */
+/*  Code                                                              */
+/* ------------------------------------------------------------------ */
+section code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* Inline code renders as a chip. `:not(pre > code)` keeps blocks out. */
+section :not(pre) > code {
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--akr-gold-lift);
+  padding: 0.08em 0.36em;
+  font-size: 0.85em;
+}
+
+section pre {
+  position: relative;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--akr-blue-lift);
+  border-radius: var(--radius);
+  color: var(--fg);
+  line-height: 1.5;
+}
+section pre > code { background: none; color: var(--fg); padding: 0; font-size: 1em; }
+
+/*
+ * Language badge. Marp Core emits `<pre is="marp-pre">` with the language
+ * only on the child `<code class="language-x">` and NO data-lang attribute
+ * (verified against marp-cli 4.5.0 output), so `attr()` cannot supply the
+ * label — each language is named explicitly below. A fence in a language
+ * not listed here simply renders without a badge.
+ */
+pre:has(> code.language-python)::before,
+pre:has(> code.language-javascript)::before,
+pre:has(> code.language-typescript)::before,
+pre:has(> code.language-java)::before,
+pre:has(> code.language-c)::before,
+pre:has(> code.language-cpp)::before,
+pre:has(> code.language-csharp)::before,
+pre:has(> code.language-go)::before,
+pre:has(> code.language-rust)::before,
+pre:has(> code.language-ruby)::before,
+pre:has(> code.language-php)::before,
+pre:has(> code.language-sql)::before,
+pre:has(> code.language-bash)::before,
+pre:has(> code.language-shell)::before,
+pre:has(> code.language-console)::before,
+pre:has(> code.language-json)::before,
+pre:has(> code.language-yaml)::before,
+pre:has(> code.language-html)::before,
+pre:has(> code.language-css)::before,
+pre:has(> code.language-haskell)::before,
+pre:has(> code.language-scala)::before,
+pre:has(> code.language-kotlin)::before,
+pre:has(> code.language-swift)::before,
+pre:has(> code.language-r)::before,
+pre:has(> code.language-lisp)::before,
+pre:has(> code.language-scheme)::before,
+pre:has(> code.language-prolog)::before,
+pre:has(> code.language-x86asm)::before,
+pre:has(> code.language-latex)::before,
+pre:has(> code.language-diff)::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  background: var(--bg-raise);
+  border-left: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0 var(--radius) 0 var(--radius);
+  padding: 2px 8px;
+  pointer-events: none;
+}
+
+pre:has(> code.language-python)::before { content: "Python"; }
+pre:has(> code.language-javascript)::before { content: "JavaScript"; }
+pre:has(> code.language-typescript)::before { content: "TypeScript"; }
+pre:has(> code.language-java)::before { content: "Java"; }
+pre:has(> code.language-c)::before { content: "C"; }
+pre:has(> code.language-cpp)::before { content: "C++"; }
+pre:has(> code.language-csharp)::before { content: "C#"; }
+pre:has(> code.language-go)::before { content: "Go"; }
+pre:has(> code.language-rust)::before { content: "Rust"; }
+pre:has(> code.language-ruby)::before { content: "Ruby"; }
+pre:has(> code.language-php)::before { content: "PHP"; }
+pre:has(> code.language-sql)::before { content: "SQL"; }
+pre:has(> code.language-bash)::before { content: "Bash"; }
+pre:has(> code.language-shell)::before { content: "Shell"; }
+pre:has(> code.language-console)::before { content: "Console"; }
+pre:has(> code.language-json)::before { content: "JSON"; }
+pre:has(> code.language-yaml)::before { content: "YAML"; }
+pre:has(> code.language-html)::before { content: "HTML"; }
+pre:has(> code.language-css)::before { content: "CSS"; }
+pre:has(> code.language-haskell)::before { content: "Haskell"; }
+pre:has(> code.language-scala)::before { content: "Scala"; }
+pre:has(> code.language-kotlin)::before { content: "Kotlin"; }
+pre:has(> code.language-swift)::before { content: "Swift"; }
+pre:has(> code.language-r)::before { content: "R"; }
+pre:has(> code.language-lisp)::before { content: "Lisp"; }
+pre:has(> code.language-scheme)::before { content: "Scheme"; }
+pre:has(> code.language-prolog)::before { content: "Prolog"; }
+pre:has(> code.language-x86asm)::before { content: "x86 asm"; }
+pre:has(> code.language-latex)::before { content: "LaTeX"; }
+pre:has(> code.language-diff)::before { content: "Diff"; }
+
+/* Opt out on a single block: <pre class="nolabel"> is not reachable from
+   Markdown, so use the .code-card wrapper (below) when you want a filename
+   instead of a language label. */
+.code-card pre::before,
+div.terminal pre::before { content: none !important; }
+
+/* Titled code block: <div class="code-card" data-file="dijkstra.py"> */
+.code-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 0.7em 0;
+}
+.code-card::before {
+  content: attr(data-file);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--fg-muted);
+  background: var(--bg-raise);
+  border-bottom: 1px solid var(--line);
+  padding: 6px 12px;
+}
+.code-card pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Syntax highlighting  (highlight.js classes from `default`)        */
+/* ------------------------------------------------------------------ */
+.hljs-comment,
+.hljs-quote                { color: var(--fg-dim); font-style: italic; }
+
+.hljs-keyword,
+.hljs-literal,
+.hljs-selector-tag         { color: var(--c-violet); }
+
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-selector-attr,
+.hljs-selector-pseudo      { color: var(--c-teal); }
+
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link                 { color: var(--c-amber); }
+
+.hljs-title,
+.hljs-class .hljs-title,
+.hljs-function .hljs-title,
+.hljs-section,
+.hljs-name                 { color: var(--akr-gold-lift); }
+
+.hljs-built_in,
+.hljs-type,
+.hljs-params,
+.hljs-selector-class       { color: var(--c-cyan); }
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-variable,
+.hljs-property,
+.hljs-template-variable    { color: var(--c-magenta); }
+
+.hljs-meta,
+.hljs-doctag,
+.hljs-punctuation,
+.hljs-operator             { color: var(--fg-muted); }
+
+.hljs-deletion             { color: var(--c-red); }
+
+.hljs-emphasis             { font-style: italic; }
+.hljs-strong               { font-weight: 700; }
+
+/* ------------------------------------------------------------------ */
+/*  Terminal transcript                                               */
+/* ------------------------------------------------------------------ */
+div.terminal {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 0.7em 0;
+  background: var(--bg-panel);
+}
+div.terminal::before {
+  content: attr(data-title);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--fg-muted);
+  background: var(--bg-raise);
+  border-bottom: 1px solid var(--line);
+  padding: 6px 12px;
+}
+div.terminal pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+/*
+ * In a ```console fence highlight.js tags the shell prompt as .hljs-meta.
+ * Lifting it to gold separates commands from output with no markup.
+ */
+div.terminal .hljs-meta { color: var(--akr-gold-lift); font-weight: 700; }
+
+/* ------------------------------------------------------------------ */
+/*  Algorithm / pseudocode block                                      */
+/* ------------------------------------------------------------------ */
+.algo {
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--akr-gold);
+  border-radius: var(--radius);
+  background: var(--bg-panel);
+  margin: 0.7em 0;
+  overflow: hidden;
+}
+.algo::before {
+  content: attr(data-name) " — " attr(data-cost);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--akr-gold-lift);
+  background: var(--bg-raise);
+  border-bottom: 1px solid var(--line);
+  padding: 6px 14px;
+}
+/* Cost is optional: drop the separator when data-cost is absent. */
+.algo:not([data-cost])::before { content: attr(data-name); }
+
+.algo ol {
+  counter-reset: algoline;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0.7em 1em 0.8em 0;
+}
+.algo ol li {
+  counter-increment: algoline;
+  position: relative;
+  margin: 0;
+  padding-left: 3.4em;
+}
+.algo ol li::before {
+  content: counter(algoline);
+  position: absolute;
+  left: 0;
+  width: 2.4em;
+  text-align: right;
+  color: var(--fg-dim);
+}
+.algo ol li::marker { content: none; }
+/* Nested steps indent without restarting the numbering. */
+.algo ol ol { padding: 0; }
+.algo ol ol li { padding-left: 4.8em; }
+.algo ol ol li::before { width: 3.8em; }
+
+/* Inline complexity chip */
+.big-o {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  color: var(--c-amber);
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.1em 0.6em;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Math                                                              */
+/* ------------------------------------------------------------------ */
+/*
+ * marp-core's DEFAULT math engine is MathJax, not KaTeX (verified: output
+ * is <mjx-container class="MathJax" jax="SVG">). MathJax draws to SVG with
+ * stroke/fill="currentColor", so it already inherits the slide text color
+ * and stays legible on the dark ground for free.
+ *
+ * Marp sets style="margin: 0" inline on display containers, so the margin
+ * reset below needs !important to win.
+ *
+ * The .katex rules are kept so a deck that opts in with `math: katex`
+ * in its front matter still gets the same treatment.
+ */
+mjx-container { color: var(--fg); }
+
+mjx-container[display="true"],
+.katex-display {
+  margin: 0.8em 0 !important;
+  padding: 0.5em 0 0.5em 1em;
+  border-left: var(--rule) solid var(--akr-gold);
+  background: var(--bg-panel);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  text-align: left;
+}
+mjx-container[display="true"] svg { margin: 0; }
+
+.katex { color: var(--fg); font-size: 1em; }
+.katex-display > .katex { text-align: left; }
+
+/* ------------------------------------------------------------------ */
+/*  Diagrams                                                          */
+/* ------------------------------------------------------------------ */
+.diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6em;
+  margin: 0.9em 0;
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+}
+.node {
+  background: var(--bg-panel);
+  border: 1px solid var(--akr-blue-lift);
+  border-radius: var(--radius);
+  color: var(--fg);
+  padding: 0.5em 0.9em;
+  text-align: center;
+}
+.node.accent { border-color: var(--akr-gold); color: var(--akr-gold-lift); }
+.node.muted  { border-color: var(--line); color: var(--fg-muted); }
+
+.edge, .arrow {
+  color: var(--fg-dim);
+  letter-spacing: -0.1em;
+}
+.arrow::after { content: "\2192"; letter-spacing: 0; }
+
+/*
+ * Hand-written inline SVG inherits the palette instead of hardcoding it.
+ * Scoped to .diagram / .fig on purpose: a bare `svg` selector would also
+ * match Marpit's own root <svg data-marpit-svg> wrapper around every slide
+ * and the <svg> MathJax renders each equation into.
+ */
+.diagram svg,
+.fig svg { color: var(--fg); max-width: 100%; height: auto; }
+.diagram svg text,
+.fig svg text { fill: currentColor; font-family: var(--font-mono); }
+.diagram svg .stroke,
+.fig svg .stroke { stroke: currentColor; fill: none; }
+.diagram svg .accent,
+.fig svg .accent { stroke: var(--akr-gold); }
+
+/* ------------------------------------------------------------------ */
+/*  Column helpers                                                    */
+/* ------------------------------------------------------------------ */
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.6em;
+  align-items: start;
+}
+.columns-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.2em;
+  align-items: start;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Title slide  ( <!-- _class: title --> )                           */
+/* ------------------------------------------------------------------ */
+section.title {
+  background:
+    repeating-linear-gradient(0deg,   var(--line-soft) 0 1px, transparent 1px 48px),
+    repeating-linear-gradient(90deg,  var(--line-soft) 0 1px, transparent 1px 48px),
+    var(--bg);
+  justify-content: center;
+  padding: 96px;
+}
+section.title h1 {
+  font-size: 62px;
+  margin-bottom: 0.25em;
+}
+/*
+ * Static block cursor, not a blinking one: PPTX export screenshots each
+ * slide, so an animation would be captured at an arbitrary frame.
+ */
+section.title h1::after {
+  content: "\25AE";
+  color: var(--akr-gold-lift);
+  margin-left: 0.12em;
+}
+section.title h2 {
+  font-family: var(--font-sans);
+  color: var(--akr-gold-lift);
+  font-size: 30px;
+  font-weight: 400;
+  margin: 0 0 1.3em;
+  padding: 0;
+  border: none;
+}
+section.title h2::after {
+  content: "";
+  display: block;
+  width: 96px;
+  height: 5px;
+  margin-top: 0.7em;
+  background: var(--akr-gold);
+}
+section.title p {
+  color: var(--fg-muted);
+  font-size: 22px;
+  margin: 0;
+}
+section.title code,
+section.title :not(pre) > code {
+  background: none;
+  border: 0;
+  color: var(--fg-muted);
+  padding: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Section divider  ( <!-- _class: divider --> )                     */
+/* ------------------------------------------------------------------ */
+section.divider {
+  background:
+    repeating-linear-gradient(0deg, var(--line-soft) 0 1px, transparent 1px 48px),
+    var(--akr-blue-deep);
+  justify-content: center;
+}
+/* The oversized numeral: <h3> on a divider is the section number. */
+section.divider h3 {
+  font-size: 96px;
+  line-height: 1;
+  color: var(--akr-gold);
+  letter-spacing: -0.04em;
+  text-transform: none;
+  margin: 0 0 0.12em;
+  opacity: 0.55;
+}
+section.divider h1 { font-size: 54px; }
+section.divider h1::after {
+  content: "";
+  display: block;
+  width: 96px;
+  height: 5px;
+  margin-top: 0.5em;
+  background: var(--akr-gold);
+}
+section.divider p { color: var(--akr-gold-lift); font-size: 24px; }
+
+/* ------------------------------------------------------------------ */
+/*  Code slide  ( <!-- _class: code --> )                             */
+/* ------------------------------------------------------------------ */
+/*
+ * Marp's auto-scaling fits a <pre> to the slide WIDTH only; nothing
+ * shrinks it to fit the height, so a long listing will silently overflow
+ * the top and bottom of the slide. These sizes keep roughly 24 lines on
+ * screen — past that, split the listing across two slides.
+ */
+section.code {
+  padding: 68px 64px 48px;
+  justify-content: flex-start;   /* never centre a listing out of the slide */
+}
+section.code h2 { font-size: 26px; margin-bottom: 0.4em; }
+section.code pre {
+  font-size: 0.6em;
+  line-height: 1.42;
+  padding: 0.7em 0.9em;          /* default's 16px block padding is wasteful here */
+}
+section.code .code-card { margin-top: 0; }
+section.code .code-card::before { font-size: 13px; padding: 5px 12px; }
+
+/* ------------------------------------------------------------------ */
+/*  Terminal slide  ( <!-- _class: terminal --> )                     */
+/*  NB: the helper panel is `div.terminal`, so a slide carrying the   */
+/*  same class name does not inherit its titlebar or border.          */
+/* ------------------------------------------------------------------ */
+section.terminal { padding: 72px 64px 52px; }
+section.terminal h2 { font-size: 28px; margin-bottom: 0.5em; }
+section.terminal div.terminal pre { font-size: 0.92em; }
+
+/* ------------------------------------------------------------------ */
+/*  Closing slide  ( <!-- _class: end --> )                           */
+/* ------------------------------------------------------------------ */
+section.end {
+  background:
+    repeating-linear-gradient(0deg,  var(--line-soft) 0 1px, transparent 1px 48px),
+    repeating-linear-gradient(90deg, var(--line-soft) 0 1px, transparent 1px 48px),
+    var(--bg);
+  justify-content: center;
+}
+section.end h1::after {
+  content: "";
+  display: block;
+  width: 96px;
+  height: 5px;
+  margin-top: 0.5em;
+  background: var(--akr-gold);
+}
+section.end strong { color: var(--fg); }
+section.end p { color: var(--fg-muted); }
+section.end a { color: var(--akr-gold-lift); border: none; }
