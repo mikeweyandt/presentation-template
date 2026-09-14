@@ -12,7 +12,10 @@ HTML := $(SRC:.md=.html)
 # --theme-set   register the custom Akron theme by name
 # --html        allow raw HTML (used for the two-column layout helper)
 # --allow-local-files  permit local images/logos when exporting to PDF/PPTX
-MARP_FLAGS := --theme-set $(THEME_DIR) --html --allow-local-files
+# --browser/--browser-path  pin browser resolution to the one the Dockerfile
+#               installed for this architecture (default is --browser auto)
+MARP_FLAGS := --theme-set $(THEME_DIR) --html --allow-local-files \
+              --browser chrome --browser-path /usr/local/bin/marp-browser
 
 .DEFAULT_GOAL := help
 

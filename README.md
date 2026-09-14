@@ -88,9 +88,35 @@ Adjust any of these by editing the CSS variables at the top of `themes/akron.css
 
 ## How export works
 
-Marp renders slides in a headless **Chromium** to produce PDF and PPTX. The
-devcontainer installs Chromium and points Marp at it via `CHROME_PATH`; Marp
-detects the container and runs Chromium with `--no-sandbox` automatically, so the
-build works out of the box. The default `.pptx` embeds each slide as a full-slide
-image. For an *editable* PowerPoint, add LibreOffice to the image and run
+Marp renders slides in a **headless browser** to produce PDF and PPTX. The
+devcontainer installs one and points Marp at it via `CHROME_PATH`, running it
+with `--no-sandbox` and `--disable-gpu`, so the build works out of the box. The
+default `.pptx` embeds each slide as a full-slide image. For an *editable*
+PowerPoint, add LibreOffice to the image and run
 `marp --pptx --pptx-editable presentation.md`.
+
+### Architecture: arm64 and amd64
+
+The browser is chosen **per architecture** in `.devcontainer/Dockerfile`, because
+neither option works everywhere:
+
+| Arch | Browser | Why not the other one |
+| --- | --- | --- |
+| `arm64` (Apple Silicon) | Debian `chromium` | Google publishes no arm64 Chrome `.deb` for Linux |
+| `amd64` | Google Chrome `.deb` | bookworm's chromium `150.0.7871.46` SIGTRAPs at launch in a container |
+
+Both are symlinked to **`/usr/local/bin/marp-browser`**, so `CHROME_PATH`, the
+`Makefile` and the VS Code settings never mention a specific browser.
+
+Rules that keep this working:
+
+- **If rendering breaks on one machine, change only that architecture's branch.**
+  Swapping the browser for *both* is what caused the earlier fix / revert /
+  re-fix loop — each change repaired one machine and broke the other.
+- **Never add `--platform`, `runArgs: ["--platform=..."]`, or
+  `DOCKER_DEFAULT_PLATFORM`.** That forces emulation, and headless browsers are
+  among the workloads most likely to crash rather than merely run slowly.
+- The last step of the install layer is a **launch smoke test**. A browser that
+  cannot start fails the *build*, on the machine where it is broken, instead of
+  dying later on the first `make pdf` — and a rebuild can never silently reuse a
+  cached layer holding a broken browser.

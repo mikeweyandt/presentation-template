@@ -10,9 +10,11 @@
       ],
       "settings": {
         "markdown.marp.themes": ["./themes/akron.css"],
-        "markdown.marp.enableHtml": true
+        "markdown.marp.enableHtml": true,
+        "markdown.marp.browser": "chrome",
+        "markdown.marp.browserPath": "/usr/local/bin/marp-browser"
       }
     }
   },
-  "postCreateCommand": "marp --version && chromium --version"
+  "postCreateCommand": "uname -m && marp --version && marp-browser --version"
 }
